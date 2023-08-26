@@ -19,7 +19,7 @@ class ShortURLFactory extends Factory
             $baseUrl .= trim(config('short-url.prefix'), '/') . '/';
         }
 
-        $urlKey = $baseUrl . Str::random(rand(6, 8));
+        $urlKey = Str::random(rand(6, 8));
 
         $destinationUrl = [
             "https://www.google.com/",
@@ -42,7 +42,7 @@ class ShortURLFactory extends Factory
         return [
             'user_id' => User::factory(),
             'destination_url' => $this->faker->randomElement($destinationUrl),
-            'default_short_url' => url( $urlKey),
+            'default_short_url' => url( $baseUrl . $urlKey),
             'url_key' => $urlKey,
             'single_use' => false,
             'forward_query_params' => true,

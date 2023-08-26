@@ -59,7 +59,7 @@ class ShortURLController extends Controller
      */
     public function show(ShortURL $shortURL)
     {
-        return (new ShortURLResource($shortURL))
+        return (new ShortURLResource($shortURL->load('visits')))
             ->response();
     }
 

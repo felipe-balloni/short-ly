@@ -11,11 +11,5 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class ShortURL extends BaseShortURL
 {
-    use HasFactory, BelongsToTenant;
-
-    protected $fillable = [
-        'user_id',
-        'short_code',
-        'url',
-    ];
+    use BelongsToTenant;
 }

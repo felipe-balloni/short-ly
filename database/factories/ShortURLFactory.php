@@ -2,18 +2,24 @@
 
 namespace Database\Factories;
 
-use App\Models\ShortURL;
 use App\Models\User;
+use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 class ShortURLFactory extends Factory
 {
     protected $model = ShortURL::class;
-
     public function definition(): array
     {
-        $urlKey = Str::random(6);
+        $baseUrl = config('short-url.default_url') ?? config('app.url');
+        $baseUrl .= '/';
+
+        if (config('short-url.prefix') !== null) {
+            $baseUrl .= trim(config('short-url.prefix'), '/') . '/';
+        }
+
+        $urlKey = $baseUrl . Str::random(rand(6, 8));
 
         $destinationUrl = [
             "https://www.google.com/",
@@ -36,11 +42,18 @@ class ShortURLFactory extends Factory
         return [
             'user_id' => User::factory(),
             'destination_url' => $this->faker->randomElement($destinationUrl),
-            'default_short_url' => url(config('short-url.prefix') .'/' . $urlKey),
+            'default_short_url' => url( $urlKey),
             'url_key' => $urlKey,
             'single_use' => false,
             'forward_query_params' => true,
             'track_visits' => true,
+            'track_ip_address' => true,
+            'track_operating_system' => true,
+            'track_operating_system_version' => true,
+            'track_browser' => true,
+            'track_browser_version' => true,
+            'track_referer_url' => true,
+            'track_device_type' => true,
         ];
     }
 }

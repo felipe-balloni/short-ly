@@ -20,6 +20,7 @@ class ShortURLResource extends JsonResource
             'short_url' => $this->default_short_url,
             'url_key' => $this->url_key,
             'visits_count' => $this->visits_count ?? 0,
+            'referer_url_count' => $this->referer_url_count ?? 0,
             'visits' => ShortURLVisitResource::collection($this->whenLoaded('visits')),
         ];
     }

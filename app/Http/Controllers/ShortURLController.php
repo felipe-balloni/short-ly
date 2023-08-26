@@ -20,7 +20,19 @@ class ShortURLController extends Controller
     {
         return ShortURLResource::collection(
             ShortURL::query()
-                ->withCount('visits')
+                ->withCount([
+                    "visits",
+                    "visits as referer_url_count" => function ($query) {
+                        $query->whereNotNull("referer_url");
+                    }
+                ])
+                ->when(request('search'), function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('destination_url', 'like', '%' . request('search') . '%')
+                            ->orWhere('url_key', 'like', '%' . request('search') . '%');
+                    });
+                })
+                ->orderBy(request('sort_by', 'id'), request('sort_direction', 'desc'))
                 ->paginate(request('per_page', 10))
         )->response();
     }

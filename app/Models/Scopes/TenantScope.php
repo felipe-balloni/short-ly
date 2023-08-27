@@ -13,7 +13,7 @@ class TenantScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if(auth()->check()) {
+        if (auth()->check()) {
             $builder->where('user_id', auth()->user()->id);
         }
     }

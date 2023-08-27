@@ -30,7 +30,7 @@ class ShortURLRequest extends FormRequest
     {
         return [
             'destination_url' => ['required', 'url', 'max:2048', 'URL'],
-            'url_key' => ['nullable', 'alpha_num', 'max:10', 'min:6' , Rule::unique(ShortURL::class)->ignore($this->route('shortURL'))],
+            'url_key' => ['nullable', 'alpha_num', 'max:10', 'min:6', Rule::unique(ShortURL::class)->ignore($this->route('shortURL'))],
         ];
     }
 

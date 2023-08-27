@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static truncate()
+ *
  * @property int $id
  */
 class User extends Authenticatable
@@ -50,12 +51,9 @@ class User extends Authenticatable
 
     /**
      * Get the short URLs associated with this model.
-     *
-     * @return HasMany
      */
     public function shortURLs(): HasMany
     {
         return $this->hasMany(ShortURL::class);
     }
-
 }

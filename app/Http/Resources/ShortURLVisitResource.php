@@ -15,16 +15,16 @@ class ShortURLVisitResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "short_url_id" => $this->short_url_id,
-            "ip_address" => $this->ip_address,
-            "operating_system" => $this->operating_system,
-            "operating_system_version" => $this->operating_system_version,
-            "browser" => $this->browser,
-            "browser_version" => $this->browser_version,
-            "referer_url" => $this->referer_url,
-            "device_type" => $this->device_type,
-            "visited_at" => $this->visited_at,
+            'id' => $this->id,
+            'short_url_id' => $this->short_url_id,
+            'ip_address' => $this->ip_address,
+            'operating_system' => $this->operating_system,
+            'operating_system_version' => $this->operating_system_version,
+            'browser' => $this->browser,
+            'browser_version' => $this->browser_version,
+            'referer_url' => $this->referer_url,
+            'device_type' => $this->device_type,
+            'visited_at' => $this->visited_at,
         ];
     }
 }

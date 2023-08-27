@@ -2,10 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\Scopes\TenantScope;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Scopes\TenantScope;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @method static addGlobalScope(TenantScope $param)
@@ -17,8 +16,8 @@ trait BelongsToTenant
     {
         static::addGlobalScope(new TenantScope);
 
-        static::creating(function($model) {
-            if(auth()->check()) {
+        static::creating(function ($model) {
+            if (auth()->check()) {
                 $model->user_id = auth()->user()->id;
             }
         });

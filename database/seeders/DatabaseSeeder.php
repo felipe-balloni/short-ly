@@ -5,10 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use AshAllenDesign\ShortURL\Models\ShortURL;
 use AshAllenDesign\ShortURL\Models\ShortURLVisit;
-use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,19 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::statement("SET foreign_key_checks=0");
+        DB::statement('SET foreign_key_checks=0');
         ShortURL::truncate();
         ShortURLVisit::truncate();
         User::truncate();
-        DB::statement("SET foreign_key_checks=1");
+        DB::statement('SET foreign_key_checks=1');
 
         User::factory()
             ->count(10)
             ->create();
 
         User::factory()->create([
-            "name" => "Test User",
-            "email" => "test@example.com"
+            'name' => 'Test User',
+            'email' => 'test@example.com',
         ]);
 
         User::all()->each(function (User $user) {
@@ -41,18 +39,16 @@ class DatabaseSeeder extends Seeder
     /**
      * Create short URLs for a user
      *
-     * @param User $user The user for whom to create the short URLs
-     * @param int $count The number of short URLs to create
-     *
-     * @return void
+     * @param  User  $user The user for whom to create the short URLs
+     * @param  int  $count The number of short URLs to create
      */
     private function createShortURLs(User $user, int $count): void
     {
         for ($i = 0; $i < $count; $i++) {
             ShortURL::factory()
-                ->has(ShortURLVisit::factory()->count(rand(0, 30)), "visits")
+                ->has(ShortURLVisit::factory()->count(rand(0, 30)), 'visits')
                 ->create([
-                    "user_id" => $user->id,
+                    'user_id' => $user->id,
                 ]);
         }
     }

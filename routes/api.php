@@ -26,6 +26,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->parameter(
             'short-url', 'shortURL'
         );
+
+    Route::get('statistic', \App\Http\Controllers\StatisticController::class);
 });
 
 Route::post('/sanctum/token', function (Request $request) {
@@ -36,7 +38,7 @@ Route::post('/sanctum/token', function (Request $request) {
 
     $user = User::where('email', $request->email)->first();
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
+    if (! $user || ! Hash::check($request->password, $user->password)) {
         throw ValidationException::withMessages([
             'email' => ['The provided credentials are incorrect.'],
         ]);
@@ -44,5 +46,3 @@ Route::post('/sanctum/token', function (Request $request) {
 
     return $user->createToken($request->email)->plainTextToken;
 });
-
-

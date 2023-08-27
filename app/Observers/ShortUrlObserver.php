@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-
 use AshAllenDesign\ShortURL\Models\ShortURL;
 
 class ShortURLObserver
@@ -12,7 +11,7 @@ class ShortURLObserver
      */
     public function creating(ShortURL $shortURL): void
     {
-        if(auth()->check()) {
+        if (auth()->check()) {
             $shortURL->user_id = auth()->user()->id;
         }
     }

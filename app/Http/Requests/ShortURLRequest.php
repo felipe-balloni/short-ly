@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests;
 
+use AshAllenDesign\ShortURL\Models\ShortURL;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @property string $url_key
  * @property string $destination_url
+ * @property mixed $id
  */
 class ShortURLRequest extends FormRequest
 {
@@ -27,7 +30,7 @@ class ShortURLRequest extends FormRequest
     {
         return [
             'destination_url' => ['required', 'url', 'max:2048', 'URL'],
-            'url_key' => ['nullable', 'alpha_num', 'max:10', 'min:6', 'unique:short_urls,url_key'],
+            'url_key' => ['nullable', 'alpha_num', 'max:10', 'min:6' , Rule::unique(ShortURL::class)->ignore($this->route('shortURL'))],
         ];
     }
 

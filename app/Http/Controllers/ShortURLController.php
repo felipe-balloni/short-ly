@@ -80,13 +80,34 @@ class ShortURLController extends Controller
      */
     public function update(ShortURLRequest $request, ShortURL $shortURL)
     {
+        $url_key = $this->generateUrlKey($request->url_key ?? $shortURL->url_key);
+
         $shortURL->update([
             'destination_url' => $request->destination_url,
-            'url_key' => $this->generateUrlKey($request->url_key ?? $shortURL->url_key),
+            'url_key' => $url_key,
+            'default_short_url' => $this->buildDefaultShortUrl($url_key),
         ]);
 
         return (new ShortURLResource($shortURL))
             ->response();
+    }
+
+    /**
+     * Build the default short URL based on the given URL key.
+     *
+     * @param string $url_key The URL key to build the short URL with.
+     * @return string The built default short URL.
+     */
+    private function buildDefaultShortUrl(string $url_key): string
+    {
+        $baseUrl = config('short-url.default_url') ?? config('app.url');
+        $baseUrl .= '/';
+
+        if (config('short-url.prefix') !== null) {
+            $baseUrl .= trim(config('short-url.prefix'), '/') . '/';
+        }
+
+        return $baseUrl . $url_key;
     }
 
     /**

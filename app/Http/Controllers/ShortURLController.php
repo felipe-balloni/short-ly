@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ShortURLRequest;
-use App\Http\Resources\ShortURLCollection;
 use App\Http\Resources\ShortURLResource;
 use App\Models\ShortURL;
 use AshAllenDesign\ShortURL\Classes\Builder;
@@ -21,15 +20,15 @@ class ShortURLController extends Controller
         return ShortURLResource::collection(
             ShortURL::query()
                 ->withCount([
-                    "visits",
-                    "visits as referer_url_count" => function ($query) {
-                        $query->whereNotNull("referer_url");
-                    }
+                    'visits',
+                    'visits as referer_url_count' => function ($query) {
+                        $query->whereNotNull('referer_url');
+                    },
                 ])
                 ->when(request('search'), function ($query) {
                     $query->where(function ($query) {
-                        $query->where('destination_url', 'like', '%' . request('search') . '%')
-                            ->orWhere('url_key', 'like', '%' . request('search') . '%');
+                        $query->where('destination_url', 'like', '%'.request('search').'%')
+                            ->orWhere('url_key', 'like', '%'.request('search').'%');
                     });
                 })
                 ->orderBy(request('sort_by', 'id'), request('sort_direction', 'desc'))
@@ -39,6 +38,7 @@ class ShortURLController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
      * @throws ShortURLException
      */
     public function store(ShortURLRequest $request, Builder $builder)
@@ -57,11 +57,8 @@ class ShortURLController extends Controller
 
     /**
      * Generate a URL key.
-     *
-     * @param string|null $url_key
-     * @return string
      */
-    protected function generateUrlKey(string|null $url_key): string
+    protected function generateUrlKey(?string $url_key): string
     {
         return $url_key ?? Str::random(rand(6, 8));
     }
@@ -71,8 +68,14 @@ class ShortURLController extends Controller
      */
     public function show(ShortURL $shortURL)
     {
-        return (new ShortURLResource($shortURL->load('visits')))
-            ->response();
+        return (new ShortURLResource($shortURL
+            ->loadCount([
+                'visits',
+                'visits as referer_url_count' => function ($query) {
+                    $query->whereNotNull('referer_url');
+                },
+            ])
+        ))->response();
     }
 
     /**
@@ -95,7 +98,7 @@ class ShortURLController extends Controller
     /**
      * Build the default short URL based on the given URL key.
      *
-     * @param string $url_key The URL key to build the short URL with.
+     * @param  string  $url_key The URL key to build the short URL with.
      * @return string The built default short URL.
      */
     private function buildDefaultShortUrl(string $url_key): string
@@ -104,10 +107,10 @@ class ShortURLController extends Controller
         $baseUrl .= '/';
 
         if (config('short-url.prefix') !== null) {
-            $baseUrl .= trim(config('short-url.prefix'), '/') . '/';
+            $baseUrl .= trim(config('short-url.prefix'), '/').'/';
         }
 
-        return $baseUrl . $url_key;
+        return $baseUrl.$url_key;
     }
 
     /**
@@ -119,5 +122,4 @@ class ShortURLController extends Controller
 
         return response()->noContent();
     }
-
 }

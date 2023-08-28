@@ -28,6 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         );
 
     Route::get('statistic', \App\Http\Controllers\StatisticController::class);
+    Route::get('short-url/{id}/visits', \App\Http\Controllers\ShortURLVisitController::class);
 });
 
 Route::post('/sanctum/token', function (Request $request) {

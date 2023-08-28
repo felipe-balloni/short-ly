@@ -16,7 +16,7 @@ class ShortURLVisitController extends Controller
     public function __invoke(Request $request)
     {
         return ShortURLVisitResource::collection(
-            ShortURLVisit::query()->where("short_url_id", 140)->get()
+            ShortURLVisit::query()->where("short_url_id", $request->id)->get()
         )->response();
     }
 }
